@@ -1,1 +1,45 @@
+using Microsoft.AspNetCore.Mvc;
 
+namespace Aula20._08.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AlunoController : ControllerBase
+    {
+        private static List<Aluno> listaAluno = new List<Aluno>();
+        [HttpPost]
+        [Route("Criar")]
+        public IActionResult Criar(Aluno aluno)
+        {
+            listaAluno.Add(aluno);
+            return Ok("Aluno cadastrado");
+        }
+        [HttpPost]
+        [Route("ObterTodos")]
+        public IActionResult ObterTodos()
+        {
+            return Ok(listaAluno);
+        }
+        [HttpGet]
+        [Route("ObterPorCpf/{cpf}")]
+        public IActionResult ObterPorCpf(string cpf)
+        {
+            var resultado = listaAluno.Where(l => l.CPF == cpf);
+            if (!resultado.Any()) //Any serve para dizer se é verdadeiro quando tiver algo e falso quando tem nada
+            return NotFound(resultado);
+            return Ok(resultado);
+        }
+        [HttpDelete]
+        [Route("Remover/{cpf}")]
+        public IActionResult Remove(string cpf)
+        {
+            return NoContent();
+        }
+        [HttpPut]
+        [Route("Atualizar/{cpf}")]
+        public IActionResult Atualizar(string cpf, Aluno aluno)
+        {
+            return Ok();
+        }
+    }
+}
